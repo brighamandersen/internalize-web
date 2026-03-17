@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Internalize</title>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111;
+      --border: #d0d0d0;
+      --edit-border: #007bff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000;
+        --text: #fff;
+        --border: #333;
+        --edit-border: #3399ff;
+      }
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: monospace;
+      text-transform: uppercase;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .icon-btn {
+      font-size: 16px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+    }
+
+    .screen {
+      display: none;
+      height: calc(100vh - 52px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .screen>.container {
+      padding: 22px;
+      max-width: 700px;
+      margin: auto;
+      box-sizing: border-box;
+      padding-bottom: 180px;
+      height: 100%;
+      border: 3px solid transparent;
+      border-radius: 8px;
+      transition: border 0.2s ease;
+    }
+
+    #editor .container.editing {
+      border-color: var(--edit-border);
+    }
+
+    #output {
+      font-size: 20px;
+      line-height: 1.85;
+      white-space: pre-wrap;
+      cursor: text;
+      font-family: monospace;
+      text-transform: none;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    #editor textarea {
+      display: block;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      border: none;
+      outline: none;
+      resize: none;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.85;
+      font-family: monospace;
+      text-transform: none;
+      overflow-y: auto;
+    }
+
+    /* ---------- BOTTOM BAR ---------- */
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+      /* fixed width for consistency */
+      width: 300px;
+      /* ensure same height */
+      min-height: 54px;
+    }
+
+    .controls button {
+      /* border: none; */
+      border: 3px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      padding: 14px 26px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .controls button.active {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .controls button.disabled {
+      color: var(--edit-border);
+      cursor: default;
+    }
+
+    .controls:not(.active) {
+      visibility: hidden;
+    }
+
+    #edit-controls.active {
+      border: 3px solid transparent;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div>Internalize</div>
+    <div id="editToggle" class="icon-btn">EDIT ✏️</div>
+  </header>
+
+  <div id="viewer" class="screen active">
+    <div class="container">
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <div id="view-controls" class="controls active">
+    <button onclick="setMode('full')" id="btn-full">ALL</button>
+    <button onclick="setMode('first')" id="btn-first">SOME</button>
+    <button onclick="setMode('blank')" id="btn-blank">NONE</button>
+  </div>
+
+  <div id="editor" class="screen">
+    <div class="container">
+      <textarea id="input" placeholder="Enter a passage to internalize..."></textarea>
+    </div>
+  </div>
+
+  <div id="edit-controls" class="controls">
+    <button class="disabled">EDIT MODE</button>
+  </div>
+
+  <script>
+    const viewer = document.getElementById("viewer");
+    const editor = document.getElementById("editor");
+    const input = document.getElementById("input");
+    const output = document.getElementById("output");
+    const editToggle = document.getElementById("editToggle");
+    const editControls = document.getElementById("edit-controls");
+    const viewControls = document.getElementById("view-controls");
+    const container = editor.querySelector(".container");
+
+    let buttons = {
+      full: document.getElementById("btn-full"),
+      first: document.getElementById("btn-first"),
+      blank: document.getElementById("btn-blank"),
+    };
+
+    let mode = "full";
+    let editing = false;
+
+    function save() {
+      localStorage.setItem("internalize_passage", input.value);
+    }
+
+    function load() {
+      input.value = localStorage.getItem("internalize_passage") || "";
+      render();
+    }
+
+    function firstLetters(text) {
+      return text.split(/\b/).map(part => {
+        if (/^\w+$/.test(part)) {
+          return part.length <= 1 ? part : part[0] + "_".repeat(part.length - 1);
+        }
+        return part;
+      }).join("");
+    }
+
+    function blankLetters(text) {
+      return text.replace(/[^\s]/g, "_");
+    }
+
+    function setEditing(state) {
+      editing = state;
+
+      if (editing) {
+        viewer.classList.remove("active");
+        editor.classList.add("active");
+
+        viewControls.classList.remove("active");
+        editControls.classList.add("active");
+
+        container.classList.add("editing");
+        editToggle.textContent = "DONE ✔️";
+        input.focus();
+
+        mode = "full";
+        render();
+
+        // Single disabled button for edit mode
+        // controls.innerHTML = `<button class="disabled">EDIT MODE</button>`;
+      } else {
+        if (!input.value) {
+          alert("Cannot have empty passage.");
+          return;
+        }
+
+        editor.classList.remove("active");
+        viewer.classList.add("active");
+        editControls.classList.remove("active");
+        viewControls.classList.add("active");
+        container.classList.remove("editing");
+        editToggle.textContent = "EDIT ✏️";
+
+        // Restore three buttons
+        // controls.innerHTML = `
+        //   <button onclick="setMode('full')" id="btn-full">ALL</button>
+        //   <button onclick="setMode('first')" id="btn-first">SOME</button>
+        //   <button onclick="setMode('blank')" id="btn-blank">NONE</button>
+        // `;
+
+        buttons = {
+          full: document.getElementById("btn-full"),
+          first: document.getElementById("btn-first"),
+          blank: document.getElementById("btn-blank"),
+        };
+
+        render();
+      }
+    }
+
+    editToggle.addEventListener("click", () => {
+      setEditing(!editing);
+    });
+
+    function render() {
+      const passage = input.value;
+      let result = passage;
+      if (mode === "first") result = firstLetters(passage);
+      if (mode === "blank") result = blankLetters(passage);
+
+      output.textContent = result;
+
+      if (!editing) {
+        Object.values(buttons).forEach(b => b.classList.remove("active"));
+        buttons[mode].classList.add("active");
+      }
+
+      save();
+    }
+
+    function setMode(newMode) {
+      mode = newMode;
+      render();
+    }
+
+    input.addEventListener("input", render);
+
+    load();
+  </script>
+
+</body>
+
+</html>
