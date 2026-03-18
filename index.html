@@ -5,21 +5,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Internalize</title>
+  <!-- Start of manifest setup -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+  <!-- End of manifest setup -->
+
 
   <style>
     :root {
       --bg: #ffffff;
-      --text: #111;
+      --text: #111111;
       --border: #d0d0d0;
       --edit-border: #007bff;
+      --disabled: #333333;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #000;
-        --text: #fff;
-        --border: #333;
+        --bg: #000000;
+        --text: #ffffff;
+        --border: #333333;
         --edit-border: #3399ff;
+        --disabled: #d0d0d0;
       }
     }
 
@@ -30,15 +41,18 @@
       background: var(--bg);
       color: var(--text);
       font-family: monospace;
-      text-transform: uppercase;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 18px;
       border-bottom: 1px solid var(--border);
+      padding: 4px;
+    }
+
+    .header-item {
+      padding: 8px;
     }
 
     .icon-btn {
@@ -46,6 +60,7 @@
       cursor: pointer;
       user-select: none;
       font-weight: 600;
+      color: var(--text);
     }
 
     .screen {
@@ -65,7 +80,7 @@
       padding-bottom: 180px;
       height: 100%;
       border: 3px solid transparent;
-      border-radius: 8px;
+      border-radius: 14px;
       transition: border 0.2s ease;
     }
 
@@ -78,10 +93,10 @@
       line-height: 1.85;
       white-space: pre-wrap;
       cursor: text;
-      font-family: monospace;
-      text-transform: none;
       height: 100%;
       overflow-y: auto;
+      font-family: monospace;
+      letter-spacing: 0.15em;
     }
 
     #editor textarea {
@@ -99,7 +114,6 @@
       font-size: 20px;
       line-height: 1.85;
       font-family: monospace;
-      text-transform: none;
       overflow-y: auto;
     }
 
@@ -110,28 +124,35 @@
       left: 50%;
       transform: translateX(-50%);
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 3px solid var(--text);
       border-radius: 14px;
       overflow: hidden;
       display: flex;
       justify-content: center;
       z-index: 10;
-      /* fixed width for consistency */
-      width: 300px;
       /* ensure same height */
       min-height: 54px;
     }
 
     .controls button {
-      /* border: none; */
-      border: 3px solid var(--text);
+      border: none;
+      border-right: 3px solid var(--text);
       background: transparent;
       color: var(--text);
       padding: 14px 26px;
-      font-size: 15px;
+      font-size: 16px;
       cursor: pointer;
-      font-weight: 600;
       flex: 1;
+      font-family: monospace;
+      letter-spacing: 0.15em;
+    }
+
+    .controls button:first-child {
+      border-left: none;
+    }
+
+    .controls button:last-child {
+      border-right: none;
     }
 
     .controls button.active {
@@ -139,17 +160,15 @@
       color: var(--bg);
     }
 
-    .controls button.disabled {
-      color: var(--edit-border);
-      cursor: default;
+    .controls button:hover:not(.active) {
+      background: #dcdcdc;
     }
 
-    .controls:not(.active) {
-      visibility: hidden;
-    }
-
-    #edit-controls.active {
-      border: 3px solid transparent;
+    #fullscreenBtn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: white;
     }
   </style>
 </head>
@@ -157,8 +176,29 @@
 <body>
 
   <header>
-    <div>Internalize</div>
-    <div id="editToggle" class="icon-btn">EDIT ✏️</div>
+    <div class="header-item">Internalize</div>
+    <div>
+
+    </div>
+    <div id="editToggle" class="header-item icon-btn">EDIT</div>
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen"
+      viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+        d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707" />
+    </svg> -->
+    <button id="fullscreenBtn" aria-label="Toggle fullscreen">
+
+      <!-- ENTER fullscreen icon -->
+      <svg id="enterIcon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+        <path d="M7 14H5v5h5v-2H7v-3zm0-4h2V7h3V5H5v5zm10 9h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+      </svg>
+
+      <!-- EXIT fullscreen icon -->
+      <svg id="exitIcon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" hidden>
+        <path d="M5 16h2v3h3v2H5v-5zm12 3v-3h2v5h-5v-2h3zM7 5v3H5V3h5v2H7zm12 3h-2V5h-3V3h5v5z" />
+      </svg>
+
+    </button>
   </header>
 
   <div id="viewer" class="screen active">
@@ -167,20 +207,16 @@
     </div>
   </div>
 
-  <div id="view-controls" class="controls active">
-    <button onclick="setMode('full')" id="btn-full">ALL</button>
-    <button onclick="setMode('first')" id="btn-first">SOME</button>
-    <button onclick="setMode('blank')" id="btn-blank">NONE</button>
-  </div>
-
   <div id="editor" class="screen">
     <div class="container">
-      <textarea id="input" placeholder="Enter a passage to internalize..."></textarea>
+      <textarea id="input"></textarea>
     </div>
   </div>
 
-  <div id="edit-controls" class="controls">
-    <button class="disabled">EDIT MODE</button>
+  <div id="controls" class="controls active">
+    <button onclick="setMode('full')" id="btn-full" class="active">ALL</button>
+    <button onclick="setMode('first')" id="btn-first">A__</button>
+    <button onclick="setMode('blank')" id="btn-blank">___</button>
   </div>
 
   <script>
@@ -189,11 +225,32 @@
     const input = document.getElementById("input");
     const output = document.getElementById("output");
     const editToggle = document.getElementById("editToggle");
-    const editControls = document.getElementById("edit-controls");
-    const viewControls = document.getElementById("view-controls");
+    const controls = document.getElementById("controls");
     const container = editor.querySelector(".container");
 
-    let buttons = {
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const enterIcon = document.getElementById("enterIcon");
+    const exitIcon = document.getElementById("exitIcon");
+
+    fullscreenBtn.onclick = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        enterIcon.hidden = false;
+        exitIcon.hidden = true;
+      } else {
+        document.exitFullscreen();
+        enterIcon.hidden = true;
+        exitIcon.hidden = false;
+      }
+    };
+
+    // document.addEventListener("fullscreenchange", () => {
+    //   const isFs = !!document.fullscreenElement;
+    //   enterIcon.hidden = isFs;
+    //   exitIcon.hidden = !isFs;
+    // });
+
+    const buttonGroup = {
       full: document.getElementById("btn-full"),
       first: document.getElementById("btn-first"),
       blank: document.getElementById("btn-blank"),
@@ -230,19 +287,12 @@
       if (editing) {
         viewer.classList.remove("active");
         editor.classList.add("active");
-
-        viewControls.classList.remove("active");
-        editControls.classList.add("active");
-
         container.classList.add("editing");
-        editToggle.textContent = "DONE ✔️";
+        editToggle.textContent = "SAVE CHANGES";
         input.focus();
 
         mode = "full";
         render();
-
-        // Single disabled button for edit mode
-        // controls.innerHTML = `<button class="disabled">EDIT MODE</button>`;
       } else {
         if (!input.value) {
           alert("Cannot have empty passage.");
@@ -251,23 +301,8 @@
 
         editor.classList.remove("active");
         viewer.classList.add("active");
-        editControls.classList.remove("active");
-        viewControls.classList.add("active");
         container.classList.remove("editing");
-        editToggle.textContent = "EDIT ✏️";
-
-        // Restore three buttons
-        // controls.innerHTML = `
-        //   <button onclick="setMode('full')" id="btn-full">ALL</button>
-        //   <button onclick="setMode('first')" id="btn-first">SOME</button>
-        //   <button onclick="setMode('blank')" id="btn-blank">NONE</button>
-        // `;
-
-        buttons = {
-          full: document.getElementById("btn-full"),
-          first: document.getElementById("btn-first"),
-          blank: document.getElementById("btn-blank"),
-        };
+        editToggle.textContent = "EDIT";
 
         render();
       }
@@ -286,8 +321,8 @@
       output.textContent = result;
 
       if (!editing) {
-        Object.values(buttons).forEach(b => b.classList.remove("active"));
-        buttons[mode].classList.add("active");
+        Object.values(buttonGroup).forEach(b => b.classList.remove("active"));
+        buttonGroup[mode].classList.add("active");
       }
 
       save();
@@ -301,6 +336,23 @@
     input.addEventListener("input", render);
 
     load();
+
+    /* register service worker */
+    // if ("serviceWorker" in navigator) {
+    //   window.addEventListener("load", () => {
+    //     navigator.serviceWorker.register("./sw.js");
+    //   });
+    // }
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", async () => {
+        try {
+          const reg = await navigator.serviceWorker.register("/sw.js");
+          console.log("✅ SW registered:", reg.scope);
+        } catch (err) {
+          console.error("❌ SW failed:", err);
+        }
+      });
+    }
   </script>
 
 </body>
