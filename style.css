@@ -23,6 +23,13 @@ body {
   font-family: monospace;
 }
 
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: yellow;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -36,6 +43,15 @@ header {
   padding: 8px;
 }
 
+.content {
+  flex: 1;
+  /* fills remaining space */
+  padding: 20px;
+  overflow: auto;
+  /* scroll content if needed */
+  background: orange;
+}
+
 #editToggle {
   font-size: 16px;
   cursor: pointer;
@@ -45,11 +61,11 @@ header {
 
 .screen {
   display: none;
-  height: calc(100vh - 52px);
+  /* height: calc(100vh - 52px); */
 }
 
 .screen.active {
-  display: block;
+  display: flex;
 }
 
 .screen>.container {
@@ -57,8 +73,12 @@ header {
   max-width: 700px;
   margin: auto;
   box-sizing: border-box;
-  padding-bottom: 180px;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+  /* padding-bottom: 180px; */
+  flex: 1;
+  /* height: 100%; */
   border: 3px solid transparent;
   border-radius: 14px;
   transition: border 0.2s ease;
@@ -75,14 +95,22 @@ header {
   letter-spacing: 0.15em;
   white-space: pre-wrap;
   cursor: text;
-  height: 100%;
+  /* height: 100%; */
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: purple;
+}
+
+#input {
+  height: 100%;
+  background: pink;
 }
 
 #editor textarea {
   display: block;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -99,21 +127,30 @@ header {
 }
 
 /* ---------- BOTTOM BAR ---------- */
-.controls {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+.view-mode-bottom-bar-container {
+  background-color: red;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 50px; */
+}
+
+.view-mode-bottom-bar {
+  /* position: fixed; */
+  /* bottom: 20px; */
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
   background: var(--bg);
   border: 3px solid var(--text);
   border-radius: 14px;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: flex;
-  justify-content: center;
-  z-index: 10;
+  /* justify-content: center; */
+  /* z-index: 10; */
 }
 
-.controls button {
+.view-mode-bottom-bar button {
   border: none;
   border-right: 3px solid var(--text);
   background: transparent;
@@ -125,13 +162,14 @@ header {
   letter-spacing: 0.15em;
   font-weight: 600;
   text-transform: uppercase;
+  width: 550px;
 }
 
-.controls button:last-child {
+.view-mode-bottom-bar button:last-child {
   border-right: none;
 }
 
-.controls button.active {
+.view-mode-bottom-bar button.active {
   background: var(--text);
   color: var(--bg);
 }
