@@ -49,15 +49,15 @@
     }
 
     .header-item {
+      font-size: 16px;
       padding: 8px;
     }
 
-    .text-btn {
+    #editToggle {
       font-size: 16px;
       cursor: pointer;
       user-select: none;
       font-weight: 600;
-      color: var(--text);
     }
 
     .screen {
@@ -86,14 +86,14 @@
     }
 
     #output {
-      font-size: 20px;
+      font-size: 16px;
       line-height: 1.85;
+      font-family: monospace;
+      letter-spacing: 0.15em;
       white-space: pre-wrap;
       cursor: text;
       height: 100%;
       overflow-y: auto;
-      font-family: monospace;
-      letter-spacing: 0.15em;
     }
 
     #editor textarea {
@@ -108,7 +108,7 @@
       resize: none;
       background: var(--bg);
       color: var(--text);
-      font-size: 20px;
+      font-size: 16px;
       line-height: 1.85;
       font-family: monospace;
       letter-spacing: 0.15em;
@@ -128,8 +128,6 @@
       display: flex;
       justify-content: center;
       z-index: 10;
-      /* ensure same height */
-      min-height: 54px;
     }
 
     .controls button {
@@ -137,12 +135,13 @@
       border-right: 3px solid var(--text);
       background: transparent;
       color: var(--text);
-      padding: 14px 26px;
+      padding: 16px 24px;
       font-size: 16px;
       cursor: pointer;
-      flex: 1;
       font-family: monospace;
       letter-spacing: 0.15em;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .controls button:last-child {
@@ -160,7 +159,7 @@
 
   <header>
     <div class="header-item">Internalize</div>
-    <div id="editToggle" class="header-item text-btn">EDIT</div>
+    <div id="editToggle" class="header-item">EDIT</div>
   </header>
 
   <div id="viewer" class="screen active">
