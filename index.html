@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -6,42 +6,41 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Internalize</title>
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png" />
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div class="layout">
-
     <header>
       <div class="header-item">Internalize</div>
-      <div id="editToggle" class="header-item">EDIT</div>
+      <button id="editSaveButton" class="header-item">Edit</button>
     </header>
 
-    <div id="viewer" class="screen active content">
-      <!-- <div class="container"> -->
-      <div id="output"></div>
-      <!-- </div> -->
+    <div id="viewer" class="content active">
+      <div class="container">
+        <div id="output"></div>
+      </div>
     </div>
 
-    <div id="editor" class="screen">
+    <div id="editor" class="content">
       <div class="container">
         <textarea id="input"></textarea>
       </div>
     </div>
 
-    <div class="view-mode-bottom-bar-container">
-      <div id="controls" class="view-mode-bottom-bar">
-        <button onclick="handleViewModeButtonClick('full')" id="view-mode-btn-full" class="active">Full</button>
-        <button onclick="handleViewModeButtonClick('hints')" id="view-mode-btn-hints">Hints</button>
-        <button onclick="handleViewModeButtonClick('blanks')" id="view-mode-btn-blanks">Blanks</button>
+    <div class="filter-button-group-container">
+      <div id="filterButtonGroup" class="filter-button-group">
+        <button id="filterButtonFull" class="filter-button active">Full</button>
+        <button id="filterButtonHints" class="filter-button">Hints</button>
+        <button id="filterButtonBlanks" class="filter-button">Blanks</button>
       </div>
     </div>
   </div>
