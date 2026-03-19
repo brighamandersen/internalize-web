@@ -1,32 +1,51 @@
-const viewer = document.getElementById("viewer");
-const editor = document.getElementById("editor");
-const input = document.getElementById("input");
-const output = document.getElementById("output");
-const editSaveButton = document.getElementById("editSaveButton");
-const viewFilterBottomBar = document.getElementById("viewFilterBottomBar");
-const container = editor.querySelector(".container");
+// CONSTANTS
 
+const LOCAL_STORAGE_PASSAGE_KEY = "internalize_passage";
+
+// GETTING UI ELEMENTS
+
+const editSaveButton = document.getElementById("editSaveButton");
+const passageTextarea = document.getElementById("passageTextarea");
+const filterButtonGroupContainer = document.getElementById("filterButtonGroupContainer");
 const filterButtonFull = document.getElementById("filterButtonFull");
 const filterButtonHints = document.getElementById("filterButtonHints");
 const filterButtonBlanks = document.getElementById("filterButtonBlanks");
 
+// INITIAL MOUNT SETUP
+
 let viewFilter = "full";
 let isEditing = false;
+let fullPassage = localStorage.getItem(LOCAL_STORAGE_PASSAGE_KEY) || "";
+passageTextarea.value = fullPassage;
 
-/* ---------- PERSISTENT STORAGE ---------- */
+// STATE VARIABLE SETTERS
 
-function savePassageInLocalStorage() {
-  localStorage.setItem("internalize_passage", input.value);
+function setFullPassage(newFullPassage) {
+  fullPassage = newFullPassage;
+  
+  passageTextarea.value = fullPassage;
+  localStorage.setItem(LOCAL_STORAGE_PASSAGE_KEY, fullPassage);
 }
 
-function loadPassageFromLocalStorage() {
-  input.value =
-    localStorage.getItem("internalize_passage") ||
-    "Welcome! Press EDIT to begin adding a passage to internalize.";
-  render();
+function setViewFilter(newViewFilter) {
+  viewFilter = newViewFilter;
+
+  // Rerender filter buttons with filter change
+  filterButtonFull.classList.toggle("active", viewFilter === "full");
+  filterButtonHints.classList.toggle("active", viewFilter === "hints");
+  filterButtonBlanks.classList.toggle("active", viewFilter === "blanks");
+
+  // Re-render passage with mask
+  if (viewFilter === "full") {
+    passageTextarea.value = fullPassage;
+  } else if (viewFilter === "hints") {
+    passageTextarea.value = getPassageHintsMask(fullPassage);
+  } else if (viewFilter === "blanks" ) {
+    passageTextarea.value = getPassageBlanksMask(fullPassage);
+  }
 }
 
-/* ---------- FULLSCREEN DOUBLE TAP ---------- */
+// FULLSCREEN DOUBLE TAP
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
@@ -52,9 +71,7 @@ document.addEventListener("touchend", (e) => {
   }
 });
 
-/* ---------- FULLSCREEN DOUBLE TAP ---------- */
-
-/* END – Double tap to enter/exit fullscreen */
+// MASK HELPERS
 
 function getPassageHintsMask(passage) {
   return passage
@@ -72,28 +89,26 @@ function getPassageBlanksMask(passage) {
   return passage.replace(/[^\s]/g, "_");
 }
 
+// ONCLICK FUNCTIONS / LISTENERS
+
 function handleEditPassageClick() {
-  viewer.classList.remove("active");
-  editor.classList.add("active");
+  passageTextarea.readOnly = false; 
   editSaveButton.textContent = "Save";
 
-  viewFilter = "full";
-  render();
+  filterButtonGroupContainer.classList.remove('visible');
+  setViewFilter("full");
 
-  input.focus();
+  passageTextarea.focus();
 }
 
 function handleSavePassageClick() {
-  if (!input.value) {
-    alert("Cannot have empty passage.");
-    return;
-  }
+  console.log('here');
 
-  editor.classList.remove("active");
-  viewer.classList.add("active");
+  setFullPassage(passageTextarea.value);
+
+  passageTextarea.readOnly = true; 
   editSaveButton.textContent = "Edit";
-
-  render();
+  filterButtonGroupContainer.classList.add('visible');
 }
 
 editSaveButton.addEventListener("click", () => {
@@ -106,40 +121,14 @@ editSaveButton.addEventListener("click", () => {
   }
 });
 
-function render() {
-  const passage = input.value;
-  let result = passage;
-  if (viewFilter === "hints") result = getPassageHintsMask(passage);
-  if (viewFilter === "blanks") result = getPassageBlanksMask(passage);
-
-  output.textContent = result;
-
-  if (!isEditing) {
-    updateActiveFilterButton();
-  }
-
-  savePassageInLocalStorage();
-}
-
-function updateActiveFilterButton() {
-  filterButtonFull.classList.toggle("active", viewFilter === "full");
-  filterButtonHints.classList.toggle("active", viewFilter === "hints");
-  filterButtonBlanks.classList.toggle("active", viewFilter === "blanks");
-}
-
-input.addEventListener("input", render);
-
 filterButtonFull.addEventListener("click", () => {
-  viewFilter = "full";
-  render();
+  setViewFilter("full");
 });
 filterButtonHints.addEventListener("click", () => {
-  viewFilter = "hints";
-  render();
+  setViewFilter("hints");
 });
 filterButtonBlanks.addEventListener("click", () => {
-  viewFilter = "blanks";
-  render();
+  setViewFilter("blanks");
 });
 
-loadPassageFromLocalStorage();
+// loadPassageFromLocalStorage();
