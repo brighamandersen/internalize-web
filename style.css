@@ -1,12 +1,5 @@
 /* CUSTOM FONTS */
 
-/* @font-face {
-  font-family: 'OxygenMono-Regular';
-  font-weight: 400;
-  src: url('./fonts/OxygenMono-Regular.ttf');
-  font-display: swap;
-} */
-
 @font-face {
   font-family: "Source Code VF";
   src: url("./fonts/SourceCodeVF-Upright.otf.woff2") format("woff2");
@@ -48,6 +41,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: "Source Code VF", monospace;
+  font-weight: 400;
 }
 
 button {
@@ -56,7 +50,6 @@ button {
   color: var(--text-color);
   cursor: pointer;
   background-color: var(--background-color);
-  font-weight: 600;
 }
 
 /* LAYOUT */
@@ -77,8 +70,7 @@ header {
 
 .header-item {
   font-size: 16px;
-  padding: 16px 8px;
-  font-weight: 600;
+  padding: 12px 16px;
 }
 
 #editSaveButton {
@@ -91,7 +83,7 @@ header {
   min-height: 0;
   display: none;
   flex-direction: column;
-  padding: 20px;
+  padding: 16px;
   overflow: hidden;
 }
 
@@ -105,13 +97,6 @@ header {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  border: 2px solid transparent;
-  border-radius: 14px;
-  transition: border 0.2s ease;
-}
-
-#editor .container {
-  border-color: var(--text-color);
 }
 
 /* VIEWER */
@@ -130,6 +115,7 @@ header {
 #input {
   overflow: hidden;
   resize: none;
+  background-color: var(--background-color);
 }
 
 /* EDITOR TEXTAREA */
@@ -176,7 +162,7 @@ header {
   align-items: center;
   border: none;
   border-right: 2px solid var(--text-color);
-  padding: 16px;
+  padding: 12px;
   font-size: 16px;
   letter-spacing: 0.15em;
   letter-spacing: 0.2em;
