@@ -13,7 +13,6 @@
 :root {
   --background-color: #ffffff;
   --text-color: #111111;
-  --border-radius: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -79,7 +78,7 @@ header {
 
 hr {
   display: flex;
-  border-radius: var(--border-radius);
+  border-radius: 14px;
   border: 1px solid var(--text-color);
   margin: 0;
 }
@@ -130,7 +129,6 @@ hr {
   letter-spacing: 0.15em;
   overflow-y: auto;
   display: block;
-  border-radius: var(--border-radius);
 }
 
 /* FILTER BUTTON GROUP */
@@ -150,7 +148,7 @@ hr {
   display: flex;
   flex: 1;
   border: 2px solid var(--text-color);
-  border-radius: var(--border-radius);
+  border-radius: 14px;
   overflow: hidden;
 }
 
