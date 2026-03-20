@@ -23,7 +23,7 @@
 }
 
 /* REMOVE ALL SCROLLBARS */
-* {
+/* * {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -31,7 +31,7 @@
 *::-webkit-scrollbar {
   width: 0;
   height: 0;
-}
+} */
 
 /* BASE RESET */
 *,
@@ -51,7 +51,18 @@ body {
   font-size: 16px;
 }
 
-button {
+/* APP SHELL */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 600px;
+  margin: auto;
+}
+
+/* BUTTONS */
+
+.btn {
   font-family: inherit;
   font-size: inherit;
   text-transform: uppercase;
@@ -61,34 +72,21 @@ button {
   font-weight: 600;
 }
 
-/* LAYOUT */
-.layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-width: 600px;
-  margin: auto;
-}
+/* NAVBAR */
 
-header {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--text-color);
 }
 
-hr {
-  display: flex;
-  border-radius: 14px;
-  border: 1px solid var(--text-color);
-  margin: 0;
-}
-
-.header-item {
+.nav-item {
   padding: 12px 16px;
   font-weight: 600;
 }
 
-#editSaveButton {
+#edit-save-btn {
   border: none;
 }
 
@@ -110,7 +108,7 @@ hr {
 }
 
 /* PASSAGE TEXTAREA */
-#passageTextarea {
+#passage-textarea {
   font-family: inherit;
   font-size: inherit;
   overflow: hidden;
@@ -131,8 +129,8 @@ hr {
   display: block;
 }
 
-/* FILTER BUTTON GROUP */
-#filterButtonGroupContainer {
+/* FILTER BUTTONS */
+#filter-btn-group-container {
   padding: 16px;
   padding-top: 0;
   display: none;
@@ -140,11 +138,11 @@ hr {
   align-items: center;
 }
 
-#filterButtonGroupContainer.visible {
+#filter-btn-group-container.visible {
   display: flex;
 }
 
-#filterButtonGroup {
+#filter-btn-group {
   display: flex;
   flex: 1;
   border: 2px solid var(--text-color);
@@ -152,8 +150,7 @@ hr {
   overflow: hidden;
 }
 
-/* FILTER BUTTON */
-.filter-button {
+.filter-btn {
   display: flex;
   flex: 1;
   justify-content: center;
@@ -165,11 +162,11 @@ hr {
   letter-spacing: 0.2em;
 }
 
-.filter-button:last-child {
+.filter-btn:last-child {
   border-right: none;
 }
 
-.filter-button.active {
+.filter-btn.active {
   background-color: var(--text-color);
   color: var(--background-color);
 }

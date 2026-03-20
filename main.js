@@ -4,12 +4,12 @@ const LOCAL_STORAGE_PASSAGE_KEY = "internalize_passage";
 
 // GETTING UI ELEMENTS
 
-const editSaveButton = document.getElementById("editSaveButton");
-const passageTextarea = document.getElementById("passageTextarea");
-const filterButtonGroupContainer = document.getElementById("filterButtonGroupContainer");
-const filterButtonFull = document.getElementById("filterButtonFull");
-const filterButtonHints = document.getElementById("filterButtonHints");
-const filterButtonBlanks = document.getElementById("filterButtonBlanks");
+const editSaveButton = document.getElementById("edit-save-btn");
+const passageTextarea = document.getElementById("passage-textarea");
+const filterButtonGroupContainer = document.getElementById("filter-btn-group-container");
+const filterButtonFull = document.getElementById("filter-btn-full");
+const filterButtonHints = document.getElementById("filter-btn-hints");
+const filterButtonBlanks = document.getElementById("filter-btn-blanks");
 
 // INITIAL MOUNT SETUP
 

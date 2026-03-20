@@ -18,26 +18,25 @@
 </head>
 
 <body>
-  <div class="layout">
-    <header>
-      <div class="header-item">Internalize</div>
-      <button id="editSaveButton" class="header-item">Edit</button>
-    </header>
-    <hr>
+  <div class="app-shell">
+    <nav class="navbar">
+      <div class="nav-item">Internalize</div>
+      <button id="edit-save-btn" class="nav-item btn">Edit</button>
+    </nav>
 
     <div class="content">
       <div class="container">
-        <textarea id="passageTextarea"
+        <textarea id="passage-textarea"
           placeholder="Welcome to Internalize! Press EDIT to add a passage. Then use the bar below to show/hide parts of the passage to help you memorize it!"
           readonly></textarea>
       </div>
     </div>
 
-    <div id="filterButtonGroupContainer" class="visible">
-      <div id="filterButtonGroup">
-        <button id="filterButtonFull" class="filter-button active">Full</button>
-        <button id="filterButtonHints" class="filter-button">Hints</button>
-        <button id="filterButtonBlanks" class="filter-button">Blanks</button>
+    <div id="filter-btn-group-container" class="visible">
+      <div id="filter-btn-group">
+        <button id="filter-btn-full" class="btn filter-btn active">Full</button>
+        <button id="filter-btn-hints" class="btn filter-btn">Hints</button>
+        <button id="filter-btn-blanks" class="btn filter-btn">Blanks</button>
       </div>
     </div>
   </div>
