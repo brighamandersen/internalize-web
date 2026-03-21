@@ -51,7 +51,7 @@ body {
   font-size: 16px;
 }
 
-/* APP SHELL */
+/* APP SHELL - FIXME REMOVE APP SEHLL */
 .app-shell {
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@ body {
   margin: auto;
 }
 
-/* BUTTONS */
+/* GLOBAL STYLING - BUTTONS */
 
 .btn {
   font-family: inherit;
@@ -70,6 +70,10 @@ body {
   cursor: pointer;
   background-color: var(--background-color);
   font-weight: 600;
+}
+
+.text-btn {
+  border: none;
 }
 
 /* NAVBAR */
@@ -86,8 +90,12 @@ body {
   font-weight: 600;
 }
 
-#edit-save-btn {
-  border: none;
+body[data-ui-mode="edit"] #edit-btn {
+  display: none;
+}
+
+body[data-ui-mode="view"] #save-btn {
+  display: none;
 }
 
 /* CONTENT AREAS */
@@ -133,13 +141,13 @@ body {
 #filter-btn-group-container {
   padding: 16px;
   padding-top: 0;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#filter-btn-group-container.visible {
-  display: flex;
+body[data-ui-mode="edit"] #filter-btn-group-container {
+  display: none;
 }
 
 #filter-btn-group {
@@ -169,4 +177,10 @@ body {
 .filter-btn.active {
   background-color: var(--text-color);
   color: var(--background-color);
+}
+
+/* MISC */
+
+.hidden {
+  display: none !important;
 }
