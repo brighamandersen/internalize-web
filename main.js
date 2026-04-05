@@ -17,36 +17,27 @@ const filterButtonBlanks = document.getElementById("filter-btn-blanks");
 let state = {
   isEditing: false,
   fullPassage: localStorage.getItem("fullPassage") || WELCOME_MESSAGE,
-  viewFilter: "full"
+  viewFilter: "full",
   // Derived state
-  // hintsPassage: "",
-  // blanksPassage: "",
+  hintsPassage: "",
+  blanksPassage: "",
 };
-
-// function initState() {
-//   const savedPassage = localStorage.getItem("fullPassage");
-
-//   if (savedPassage) {
-//     state.fullPassage = savedPassage;
-
-//     // compute derived values once
-//     state.hintsPassage = getPassageHintsMask(savedPassage);
-//     state.blanksPassage = getPassageBlanksMask(savedPassage);
-//   }
-// }
 
 function setState(stateUpdates) {
   Object.assign(state, stateUpdates);
-
-  // Save full passage
-  if ("fullPassage" in stateUpdates) {
-    localStorage.setItem("fullPassage", stateUpdates.fullPassage);
-  }
-
+  runStateEffects(stateUpdates);
   updateUI();
 }
 
+function runStateEffects(stateUpdates) {
+  // Save full passage
+  if ("fullPassage" in stateUpdates) {
+    localStorage.setItem("fullPassage", stateUpdates.fullPassage);
 
+    state.hintsPassage = getPassageHintsMask(stateUpdates.fullPassage);
+    state.blanksPassage = getPassageBlanksMask(stateUpdates.fullPassage);
+  }
+}
 
 // RENDER UPDATERS
 
@@ -68,9 +59,9 @@ function updateUI() {
   if (state.viewFilter === "full") {
     passageTextarea.value = state.fullPassage;
   } else if (state.viewFilter === "hints") {
-    passageTextarea.value = getPassageHintsMask(state.fullPassage);
+    passageTextarea.value = state.hintsPassage;
   } else if (state.viewFilter === "blanks") {
-    passageTextarea.value = getPassageBlanksMask(state.fullPassage);
+    passageTextarea.value = state.blanksPassage;
   }
 
   
@@ -156,4 +147,5 @@ filterButtonBlanks.addEventListener("click", () => {
 
 // INITIAL MOUNT
 
-updateUI();
+// Call setState on itself to trigger initial state effects and UI updates
+setState(state);
