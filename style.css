@@ -22,23 +22,15 @@
   }
 }
 
-/* REMOVE ALL SCROLLBARS */
-/* * {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-} */
-
 /* BASE RESET */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
+
+/* LAYOUT */
 
 html,
 body {
@@ -51,16 +43,15 @@ body {
   font-size: 16px;
 }
 
-/* APP SHELL - FIXME REMOVE APP SEHLL */
 .app-shell {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100dvh;
   max-width: 600px;
   margin: auto;
 }
 
-/* GLOBAL STYLING - BUTTONS */
+/* BUTTONS */
 
 .btn {
   font-family: inherit;
@@ -90,15 +81,8 @@ body {
   font-weight: 600;
 }
 
-body[data-ui-mode="edit"] #edit-btn {
-  display: none;
-}
-
-body[data-ui-mode="view"] #save-btn {
-  display: none;
-}
-
 /* CONTENT AREAS */
+
 .content {
   flex: 1;
   min-height: 0;
@@ -116,6 +100,7 @@ body[data-ui-mode="view"] #save-btn {
 }
 
 /* PASSAGE TEXTAREA */
+
 #passage-textarea {
   font-family: inherit;
   font-size: inherit;
@@ -138,16 +123,13 @@ body[data-ui-mode="view"] #save-btn {
 }
 
 /* FILTER BUTTONS */
+
 #filter-btn-group-container {
   padding: 16px;
   padding-top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-body[data-ui-mode="edit"] #filter-btn-group-container {
-  display: none;
 }
 
 #filter-btn-group {
