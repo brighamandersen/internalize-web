@@ -1,6 +1,6 @@
 // CONSTANTS
 
-const LOCAL_STORAGE_PASSAGE_KEY = "internalize_passage";
+const WELCOME_MESSAGE = "Welcome to Internalize! Press EDIT to add a passage. Then use the bar below to show/hide parts of the passage to help you memorize it!";
 
 // GETTING UI ELEMENTS
 
@@ -12,9 +12,11 @@ const filterButtonFull = document.getElementById("filter-btn-full");
 const filterButtonHints = document.getElementById("filter-btn-hints");
 const filterButtonBlanks = document.getElementById("filter-btn-blanks");
 
+// STATE
+
 let state = {
   isEditing: false,
-  fullPassage: localStorage.getItem(LOCAL_STORAGE_PASSAGE_KEY) || "",
+  fullPassage: localStorage.getItem("fullPassage") || WELCOME_MESSAGE,
   viewFilter: "full"
   // Derived state
   // hintsPassage: "",
@@ -22,7 +24,7 @@ let state = {
 };
 
 // function initState() {
-//   const savedPassage = localStorage.getItem(LOCAL_STORAGE_PASSAGE_KEY) || "";
+//   const savedPassage = localStorage.getItem("fullPassage");
 
 //   if (savedPassage) {
 //     state.fullPassage = savedPassage;
@@ -33,55 +35,24 @@ let state = {
 //   }
 // }
 
-// function setState(stateUpdates) {
-//   Object.assign(state, stateUpdates);
+function setState(stateUpdates) {
+  Object.assign(state, stateUpdates);
 
-//   // Save full passage
-//   if ("fullPassage" in stateUpdates) {
-//     localStorage.setItem(LOCAL_STORAGE_PASSAGE_KEY, stateUpdates.fullPassage);
-//   }
+  // Save full passage
+  if ("fullPassage" in stateUpdates) {
+    localStorage.setItem("fullPassage", stateUpdates.fullPassage);
+  }
 
-//   updateUI();
-// }
+  updateUI();
+}
 
-// function setIsEditing(newIsEditing) {
-//   if (isEditing === newIsEditing) return;
-//   isEditing = newIsEditing;
-  
-//   if (isEditing) {
-//     setState({ viewFilter: "full" })
-//     passageTextarea.focus();
-//   }
-  
-//   syncEditSaveButtonUI();
-//   syncPassageContentUI();
-//   updateFilterButtonsUI();
-// }
-
-
-
-// function setFullPassage(newFullPassage) {
-//   if (fullPassage === newFullPassage) return;
-//   fullPassage = newFullPassage;
-  
-//   localStorage.setItem(LOCAL_STORAGE_PASSAGE_KEY, fullPassage);
-//   syncPassageContentUI();
-// }
-
-
-// function setViewFilter(newViewFilter) {
-//   if (viewFilter === newViewFilter) return;
-//   state.viewFilter = newViewFilter;
-
-//   syncFilterButtonsUI();
-//   syncPassageContentUI();
-// }
 
 
 // RENDER UPDATERS
 
 function updateUI() {
   // edit save buttons
+
   if (state.isEditing) {
     saveButton.classList.remove("hidden");
     editButton.classList.add("hidden");
@@ -160,72 +131,29 @@ function getPassageBlanksMask(passage) {
 // CLICK EVENT LISTENERS
 
 editButton.addEventListener("click", () => {
-  state.isEditing = true;
-  state.viewFilter = "full";
-  updateUI();
-  // editButton.classList.add("hidden");
-  // saveButton.classList.remove("hidden");
-
-  // filterButtonGroupContainer.classList.add('hidden');
-  // isEditing = !state.isEditing;
-
-  // viewFilter = "full";
-
-  // passageTextarea.readOnly = false; 
-
-  // filterButtonGroupContainer.classList.remove('visible');
-
-  // passageTextarea.focus();
+  setState({
+    isEditing: true,
+    viewFilter: "full"
+  });
 });
 
 saveButton.addEventListener("click", () => {
-  state.isEditing = false;
-  
-  // state.fullPassage = passageTextarea.value;
-  localStorage.setItem(LOCAL_STORAGE_PASSAGE_KEY, state.fullPassage);
-
-  updateUI();
-
-  // saveButton.classList.add("hidden");
-  // editButton.classList.remove("hidden");
-
-  // filterButtonGroupContainer.classList.remove('hidden');
-  // setFullPassage(passageTextarea.value);
-
-  // passageTextarea.readOnly = true; 
-  // editSaveButton.textContent = "Edit";
-  // filterButtonGroupContainer.classList.add('visible');
+  setState({ 
+    isEditing: false,
+    fullPassage: passageTextarea.value
+  });
 })
 
 filterButtonFull.addEventListener("click", () => {
-  state.viewFilter = "full";
-  // filterButtonFull.classList.toggle("active", state.viewFilter === "full");
-  // filterButtonHints.classList.toggle("active", state.viewFilter === "hints");
-  // filterButtonBlanks.classList.toggle("active", state.viewFilter === "blanks");
-  // syncFilterButtonsUI();
-  // syncPassageContentUI();
-  updateUI();
+  setState({ viewFilter: "full" });
 });
 filterButtonHints.addEventListener("click", () => {
-  state.viewFilter = "hints";
-  //  filterButtonFull.classList.toggle("active", state.viewFilter === "full");
-  // filterButtonHints.classList.toggle("active", state.viewFilter === "hints");
-  // filterButtonBlanks.classList.toggle("active", state.viewFilter === "blanks");
-  // syncFilterButtonsUI();
-  // syncPassageContentUI();
-  updateUI();
+  setState({ viewFilter: "hints" });
 });
 filterButtonBlanks.addEventListener("click", () => {
-  state.viewFilter = "blanks";
-  // syncFilterButtonsUI();
-  // syncPassageContentUI();
-  updateUI();
+  setState({ viewFilter: "blanks" });
 });
 
-// Initial Mount
+// INITIAL MOUNT
 
 updateUI();
-
-// syncEditSaveButtonUI();
-// syncPassageContentUI();
-// syncFilterButtonsUI();
