@@ -124,17 +124,10 @@ body {
 
 /* FILTER BUTTONS */
 
-#filter-btn-group-container {
-  padding: 16px;
-  padding-top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 #filter-btn-group {
   display: flex;
-  flex: 1;
+  margin: 16px;
+  margin-top: 0;
   border: 2px solid var(--text-color);
   border-radius: 14px;
   overflow: hidden;

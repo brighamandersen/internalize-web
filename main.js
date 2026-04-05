@@ -7,7 +7,7 @@ const WELCOME_MESSAGE = "Welcome to Internalize! Press EDIT to add a passage. Th
 const editButton = document.getElementById("edit-btn");
 const saveButton = document.getElementById("save-btn");
 const passageTextarea = document.getElementById("passage-textarea");
-const filterButtonGroupContainer = document.getElementById("filter-btn-group-container");
+const filterButtonGroup = document.getElementById("filter-btn-group");
 const filterButtonFull = document.getElementById("filter-btn-full");
 const filterButtonHints = document.getElementById("filter-btn-hints");
 const filterButtonBlanks = document.getElementById("filter-btn-blanks");
@@ -47,12 +47,12 @@ function updateUI(stateUpdates) {
       saveButton.classList.remove("hidden");
       editButton.classList.add("hidden");
       passageTextarea.readOnly = false;
-      filterButtonGroupContainer.classList.add('hidden');
+      filterButtonGroup.classList.add('hidden');
     } else {
       editButton.classList.remove("hidden");
       saveButton.classList.add("hidden");
       passageTextarea.readOnly = true;
-      filterButtonGroupContainer.classList.remove('hidden');
+      filterButtonGroup.classList.remove('hidden');
     }
   }
   
