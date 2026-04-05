@@ -26,7 +26,7 @@ let state = {
 function setState(stateUpdates) {
   Object.assign(state, stateUpdates);
   runStateEffects(stateUpdates);
-  updateUI();
+  updateUI(stateUpdates);
 }
 
 function runStateEffects(stateUpdates) {
@@ -41,41 +41,34 @@ function runStateEffects(stateUpdates) {
 
 // RENDER UPDATERS
 
-function updateUI() {
-  // edit save buttons
-
-  if (state.isEditing) {
-    saveButton.classList.remove("hidden");
-    editButton.classList.add("hidden");
-  } else {
-    editButton.classList.remove("hidden");
-    saveButton.classList.add("hidden");
+function updateUI(stateUpdates) {
+  if ("isEditing" in stateUpdates) {
+    if (state.isEditing) {
+      saveButton.classList.remove("hidden");
+      editButton.classList.add("hidden");
+      passageTextarea.readOnly = false;
+      filterButtonGroupContainer.classList.add('hidden');
+    } else {
+      editButton.classList.remove("hidden");
+      saveButton.classList.add("hidden");
+      passageTextarea.readOnly = true;
+      filterButtonGroupContainer.classList.remove('hidden');
+    }
   }
-
-  // passage
-
-  passageTextarea.readOnly = !state.isEditing;
-
-  if (state.viewFilter === "full") {
-    passageTextarea.value = state.fullPassage;
-  } else if (state.viewFilter === "hints") {
-    passageTextarea.value = state.hintsPassage;
-  } else if (state.viewFilter === "blanks") {
-    passageTextarea.value = state.blanksPassage;
-  }
-
   
-  // filter buttons
+  if ("viewFilter" in stateUpdates) {
+    if (state.viewFilter === "full") {
+      passageTextarea.value = state.fullPassage;
+    } else if (state.viewFilter === "hints") {
+      passageTextarea.value = state.hintsPassage;
+    } else if (state.viewFilter === "blanks") {
+      passageTextarea.value = state.blanksPassage;
+    }
 
-  if (state.isEditing) {
-    filterButtonGroupContainer.classList.add('hidden');
-  } else {
-    filterButtonGroupContainer.classList.remove('hidden');
+    filterButtonFull.classList.toggle("active", state.viewFilter === "full");
+    filterButtonHints.classList.toggle("active", state.viewFilter === "hints");
+    filterButtonBlanks.classList.toggle("active", state.viewFilter === "blanks");
   }
-
-  filterButtonFull.classList.toggle("active", state.viewFilter === "full");
-  filterButtonHints.classList.toggle("active", state.viewFilter === "hints");
-  filterButtonBlanks.classList.toggle("active", state.viewFilter === "blanks");
 }
 
 // FULLSCREEN DOUBLE TAP
