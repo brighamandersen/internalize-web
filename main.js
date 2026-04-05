@@ -141,4 +141,4 @@ filterButtonBlanks.addEventListener("click", () => {
 // INITIAL MOUNT
 
 // Call setState on itself to trigger initial state effects and UI updates
-setState(state);
+setState({ ...state });
