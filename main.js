@@ -39,7 +39,7 @@ function runStateEffects(stateUpdates) {
   }
 }
 
-// RENDER UPDATERS
+// RENDERING
 
 function updateUI(stateUpdates) {
   if ("isEditing" in stateUpdates) {
