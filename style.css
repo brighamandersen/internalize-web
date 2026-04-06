@@ -80,7 +80,7 @@ body {
   font-weight: 600;
 }
 
-/* CONTENT AREAS */
+/* CONTENT */
 
 .content {
   flex: 1;
@@ -89,13 +89,6 @@ body {
   flex-direction: column;
   padding: 16px;
   overflow: hidden;
-}
-
-.content>.container {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 /* PASSAGE TEXTAREA */
