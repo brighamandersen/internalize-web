@@ -71,29 +71,6 @@ function updateUI(stateUpdates) {
   }
 }
 
-// FULLSCREEN DOUBLE TAP
-
-function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-}
-
-document.addEventListener("dblclick", toggleFullscreen); // Desktop
-
-let lastTouchTime = 0;
-document.addEventListener("touchend", (e) => {
-  const now = Date.now();
-  if (now - lastTouchTime < 300) { // Mobile double tap
-    toggleFullscreen();
-    lastTouchTime = 0;
-  } else {
-    lastTouchTime = now;
-  }
-});
-
 // MASK HELPERS
 
 function getPassageHintsMask(passage) {
