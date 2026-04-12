@@ -115,40 +115,7 @@ filterButtonBlanks.addEventListener("click", () => {
   setState({ viewFilter: "blanks" });
 });
 
-// SERVICE WORKER
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    try {
-      const reg = await navigator.serviceWorker.register("/service-worker.js");
-      console.log("Service Worker registered:", reg.scope);
-    } catch (err) {
-      console.error("Service Worker registration failed:", err);
-    }
-  });
-}
-
-function handleSharedInput() {
-  const params = new URLSearchParams(window.location.search);
-  const incomingSharedText = params.get("text");
-
-  if (incomingSharedText) {
-    setState({ 
-      fullPassage: incomingSharedText,
-      isEditing: false,
-      viewFilter: "full"
-     });
-
-    // Clean URL so refresh doesn't re-trigger
-    window.history.replaceState({}, "", "/");
-  }
-}
-
-handleSharedInput();
-
 // INITIAL MOUNT
 
 // Call setState on itself to trigger initial state effects and UI updates
 setState({ ...state });
-
-//tmp
